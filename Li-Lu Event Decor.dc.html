@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{overflow-x:hidden;}
+input::placeholder,textarea::placeholder{opacity:0.55;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+[data-show-mob]{display:none;}
+@media(max-width:900px){
+  [data-hide-tab]{display:none!important;}
+  [data-show-mob]{display:flex!important;}
+  [data-g3]{grid-template-columns:1fr 1fr!important;}
+  [data-g2]{grid-template-columns:1fr!important;}
+  [data-aboutg]{grid-template-columns:1fr!important;}
+  [data-footerg]{grid-template-columns:1fr 1fr!important;}
+  [data-statsg]{grid-template-columns:1fr 1fr!important;}
+}
+@media(max-width:600px){
+  [data-g3]{grid-template-columns:1fr!important;}
+  [data-footerg]{grid-template-columns:1fr!important;}
+}
+</style>
+</helmet>
+
+<div style="background: {{ c.bg }}; color: {{ c.text }}; min-height: 100vh; font-family: 'Raleway', sans-serif; transition: background 0.5s, color 0.5s;">
+
+  <!-- NAV -->
+  <nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: {{ c.navBg }}; border-bottom: 1px solid {{ c.navBorder }}; box-shadow: {{ c.navShadow }}; transition: all 0.4s ease; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px; height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <a href="#home" style="display: flex; align-items: center; gap: 13px; text-decoration: none; flex-shrink: 0;">
+        <img src="{{ logoImg }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover;">
+        <div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: {{ c.gold }}; letter-spacing: 1px; line-height: 1.1;">Li·Lu</div>
+          <div style="font-size: 7.5px; font-weight: 700; color: {{ c.navText }}; letter-spacing: 3px; text-transform: uppercase; line-height: 1; transition: color 0.4s; margin-top: 1px;">EVENT DECOR</div>
+        </div>
+      </a>
+      <div data-hide-tab style="display: flex; align-items: center; gap: 36px;">
+        <a href="#about" style="font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: {{ c.navText }}; text-decoration: none; opacity: 0.75; transition: opacity 0.2s;" style-hover="opacity: 1;">{{ text.nav.about }}</a>
+        <a href="#services" style="font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: {{ c.navText }}; text-decoration: none; opacity: 0.75; transition: opacity 0.2s;" style-hover="opacity: 1;">{{ text.nav.services }}</a>
+        <a href="#gallery" style="font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: {{ c.navText }}; text-decoration: none; opacity: 0.75; transition: opacity 0.2s;" style-hover="opacity: 1;">{{ text.nav.gallery }}</a>
+        <a href="#contact" style="font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: {{ c.navText }}; text-decoration: none; opacity: 0.75; transition: opacity 0.2s;" style-hover="opacity: 1;">{{ text.nav.contact }}</a>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+        <button onClick="{{ toggleTheme }}" title="{{ themeLabel }}" style="background: transparent; border: 1px solid {{ c.border }}; color: {{ c.navText }}; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" style-hover="border-color: {{ c.gold }}; color: {{ c.gold }};">{{ themeIcon }}</button>
+        <button onClick="{{ toggleLang }}" style="background: transparent; border: 1px solid {{ c.border }}; color: {{ c.gold }}; font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; padding: 6px 12px; border-radius: 1px; cursor: pointer; text-transform: uppercase; transition: all 0.2s;" style-hover="background: {{ c.gold }}; color: #fff; border-color: {{ c.gold }};">{{ langLabel }}</button>
+        <a href="#contact" data-hide-tab style="background: {{ c.gold }}; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 10px 24px; text-decoration: none; transition: all 0.3s; white-space: nowrap;" style-hover="background: {{ c.crimson }};">{{ text.nav.book }}</a>
+        <button onClick="{{ toggleMobileMenu }}" data-show-mob style="background: transparent; border: 1px solid {{ c.border }}; color: {{ c.navText }}; width: 40px; height: 40px; border-radius: 1px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; flex-shrink: 0; transition: border-color 0.2s;" style-hover="border-color: {{ c.gold }};">
+          <div style="width: 18px; height: 1.5px; background: currentColor;"></div>
+          <div style="width: 18px; height: 1.5px; background: currentColor;"></div>
+          <div style="width: 12px; height: 1.5px; background: currentColor;"></div>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" style="position: relative; height: 100vh; min-height: 600px; overflow: hidden;">
+    <img src="{{ heroImg }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.78) 100%);"></div>
+    <div style="position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 32px 0;">
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 28px; animation: fadeIn 1.2s ease both;">{{ text.hero.badge }}</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(50px, 8vw, 108px); font-weight: 300; font-style: italic; color: #fff; line-height: 1; animation: fadeUp 1s ease 0.25s both;">{{ text.hero.h1a }}</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(50px, 8vw, 108px); font-weight: 300; font-style: italic; color: {{ c.gold }}; line-height: 1.1; margin-bottom: 36px; animation: fadeUp 1s ease 0.4s both;">{{ text.hero.h1b }}</div>
+      <div style="width: 52px; height: 1px; background: {{ c.gold }}; margin-bottom: 28px; animation: fadeIn 1s ease 0.55s both;"></div>
+      <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.8); max-width: 500px; margin-bottom: 52px; animation: fadeUp 1s ease 0.65s both; text-wrap: pretty;">{{ text.hero.sub }}</p>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; animation: fadeUp 1s ease 0.85s both;">
+        <a href="#contact" style="background: {{ c.gold }}; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; padding: 16px 44px; text-decoration: none; border: 1px solid {{ c.gold }}; transition: all 0.3s;" style-hover="background: transparent; color: {{ c.gold }};">{{ text.hero.cta1 }}</a>
+        <a href="#gallery" style="background: transparent; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; padding: 16px 44px; text-decoration: none; border: 1px solid rgba(255,255,255,0.4); transition: all 0.3s;" style-hover="border-color: {{ c.gold }}; color: {{ c.gold }};">{{ text.hero.cta2 }}</a>
+      </div>
+    </div>
+    <div style="position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); text-align: center;">
+      <div style="animation: floatY 2.5s ease-in-out infinite;">
+        <div style="font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-bottom: 10px;">Scroll</div>
+        <div style="width: 1px; height: 32px; background: rgba(255,255,255,0.22); margin: 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section style="background: {{ c.bg2 }}; border-bottom: 1px solid {{ c.border }};">
+    <div style="max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr);" data-statsg>
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="padding: 44px 20px; text-align: center; border-right: 1px solid {{ c.border }};">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: {{ c.gold }}; line-height: 1; margin-bottom: 8px;">{{ s.num }}</div>
+          <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: {{ c.textMuted }};">{{ s.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" style="background: {{ c.bg }}; padding: 120px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;" data-aboutg>
+        <div style="position: relative; padding: 0 20px 20px 0;">
+          <div style="position: absolute; bottom: 0; right: 0; width: calc(100% - 10px); height: calc(100% - 10px); border: 1px solid {{ c.gold }}; opacity: 0.28;"></div>
+          <img src="{{ aboutImg }}" style="width: 100%; height: 560px; object-fit: cover; display: block; position: relative; z-index: 1;">
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+            <div style="width: 32px; height: 1px; background: {{ c.gold }};"></div>
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }};">{{ text.about.badge }}</span>
+          </div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 3.5vw, 54px); font-weight: 300; font-style: italic; color: {{ c.text }}; line-height: 1.2; margin-bottom: 28px;">{{ text.about.titleLine1 }}<br>{{ text.about.titleLine2 }}</div>
+          <div style="width: 48px; height: 1px; background: {{ c.gold }}; margin-bottom: 28px;"></div>
+          <p style="font-size: 15px; font-weight: 300; line-height: 1.9; color: {{ c.textSub }}; margin-bottom: 18px; text-wrap: pretty;">{{ text.about.p1 }}</p>
+          <p style="font-size: 15px; font-weight: 300; line-height: 1.9; color: {{ c.textSub }}; margin-bottom: 44px; text-wrap: pretty;">{{ text.about.p2 }}</p>
+          <a href="#contact" style="display: inline-block; color: {{ c.text }}; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 14px 36px; text-decoration: none; border: 1px solid {{ c.text }}; transition: all 0.3s;" style-hover="background: {{ c.gold }}; color: #fff; border-color: {{ c.gold }};">{{ text.about.cta }}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OCCASIONS -->
+  <section id="occasions" style="background: {{ c.bg2 }}; padding: 120px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="text-align: center; margin-bottom: 64px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 16px;">{{ text.occasions.badge }}</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 60px); font-weight: 300; font-style: italic; color: {{ c.text }};">{{ text.occasions.title }}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" data-g3>
+        <sc-for list="{{ occasions }}" as="occ" hint-placeholder-count="6">
+          <div style="position: relative; height: 380px; overflow: hidden;">
+            <img src="{{ occ.img }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.84) 0%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0) 100%); transition: background 0.4s;" style-hover="background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.32) 55%, rgba(0,0,0,0.08) 100%);"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 28px; pointer-events: none;">
+              <div style="width: 28px; height: 1px; background: {{ c.gold }}; margin-bottom: 12px;"></div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; font-style: italic; color: #fff; margin-bottom: 6px;">{{ occ.name }}</div>
+              <div style="font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: {{ c.gold }};">{{ occ.sub }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" style="background: {{ c.bg }}; padding: 120px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="text-align: center; margin-bottom: 72px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 16px;">{{ text.services.badge }}</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 60px); font-weight: 300; font-style: italic; color: {{ c.text }};">{{ text.services.title }}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: {{ c.border }};" data-g3>
+        <sc-for list="{{ services }}" as="svc" hint-placeholder-count="6">
+          <div style="background: {{ c.bg }}; padding: 52px 44px; transition: background 0.3s;" style-hover="background: {{ c.bg2 }};">
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 60px; font-weight: 300; color: {{ c.goldTint }}; line-height: 1; margin-bottom: 20px;">{{ svc.num }}</div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 23px; font-weight: 500; color: {{ c.text }}; margin-bottom: 12px;">{{ svc.name }}</div>
+            <div style="width: 32px; height: 1px; background: {{ c.gold }}; margin-bottom: 16px;"></div>
+            <p style="font-size: 14px; font-weight: 300; line-height: 1.85; color: {{ c.textSub }}; text-wrap: pretty;">{{ svc.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" style="background: {{ c.bg2 }}; padding: 120px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="text-align: center; margin-bottom: 64px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 16px;">{{ text.gallery.badge }}</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 60px); font-weight: 300; font-style: italic; color: {{ c.text }};">{{ text.gallery.title }}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;" data-g3>
+        <sc-for list="{{ galleryImages }}" as="gimg" hint-placeholder-count="12">
+          <div style="position: relative; aspect-ratio: 1; overflow: hidden; cursor: pointer;" onMouseEnter="{{ gimg.onMouseEnter }}" onMouseLeave="{{ gimg.onMouseLeave }}" onClick="{{ gimg.open }}">
+            <img src="{{ gimg.src }}" style="{{ gimg.imgStyle }}">
+            <div style="{{ gimg.overlayStyle }}">
+              <div style="{{ gimg.iconStyle }}">+</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="text-align: center; margin-top: 52px;">
+        <a href="https://www.instagram.com/li_lu_decor_london/" target="_blank" rel="noopener" style="font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: {{ c.gold }}; text-decoration: none; padding-bottom: 3px; border-bottom: 1px solid {{ c.gold }}; transition: opacity 0.3s; display: inline-block;" style-hover="opacity: 0.6;">{{ text.gallery.viewAll }}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="reviews" style="background: {{ c.bg }}; padding: 120px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="text-align: center; margin-bottom: 72px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 16px;">{{ text.testimonials.badge }}</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 60px); font-weight: 300; font-style: italic; color: {{ c.text }};">{{ text.testimonials.title }}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;" data-g3>
+        <sc-for list="{{ testimonials }}" as="tm" hint-placeholder-count="3">
+          <div style="background: {{ c.bgCard }}; padding: 48px 40px; border: 1px solid {{ c.border }}; transition: border-color 0.3s;" style-hover="border-color: {{ c.gold }};">
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 68px; font-weight: 300; color: {{ c.goldTint }}; line-height: 0.9; margin-bottom: 18px; font-style: italic;">"</div>
+            <p style="font-size: 15px; font-weight: 300; line-height: 1.9; color: {{ c.textSub }}; font-style: italic; margin-bottom: 32px; text-wrap: pretty;">{{ tm.text }}</p>
+            <div style="width: 32px; height: 1px; background: {{ c.gold }}; margin-bottom: 18px;"></div>
+            <div style="font-size: 13px; font-weight: 600; color: {{ c.text }}; letter-spacing: 0.3px;">{{ tm.name }}</div>
+            <div style="font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: {{ c.gold }}; margin-top: 5px;">{{ tm.occasion }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING CTA -->
+  <section style="background: {{ c.crimson }}; padding: 120px 40px; text-align: center;">
+    <div style="max-width: 720px; margin: 0 auto;">
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 24px;">{{ text.pricing.badge }}</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 5vw, 68px); font-weight: 300; font-style: italic; color: #fff; line-height: 1.2; margin-bottom: 24px;">{{ text.pricing.title }}</div>
+      <div style="width: 48px; height: 1px; background: {{ c.gold }}; margin: 0 auto 28px;"></div>
+      <p style="font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.7); margin-bottom: 52px; text-wrap: pretty;">{{ text.pricing.sub }}</p>
+      <a href="#contact" style="background: {{ c.gold }}; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 18px 56px; text-decoration: none; display: inline-block; border: 1px solid {{ c.gold }}; transition: all 0.3s;" style-hover="background: transparent; color: {{ c.gold }};">{{ text.pricing.cta }}</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="background: {{ c.bg2 }}; padding: 120px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="text-align: center; margin-bottom: 72px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 16px;">{{ text.contact.badge }}</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 56px); font-weight: 300; font-style: italic; color: {{ c.text }};">{{ text.contact.title }}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;" data-aboutg>
+        <div>
+          <p style="font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 300; line-height: 1.75; color: {{ c.textSub }}; font-style: italic; margin-bottom: 48px; text-wrap: pretty;">{{ text.contact.sub }}</p>
+          <div style="width: 40px; height: 1px; background: {{ c.border }}; margin-bottom: 32px;"></div>
+          <div style="font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: {{ c.textMuted }}; margin-bottom: 16px;">{{ text.contact.orLabel }}</div>
+          <a href="https://www.instagram.com/li_lu_decor_london/" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 14px; text-decoration: none; color: {{ c.text }}; transition: color 0.2s;" style-hover="color: {{ c.gold }};">
+            <div style="width: 44px; height: 44px; border: 1px solid {{ c.border }}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 700; letter-spacing: 1px; color: {{ c.gold }}; flex-shrink: 0;">IG</div>
+            <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic;">@li_lu_decor_london</span>
+          </a>
+        </div>
+        <div>
+          <sc-if value="{{ formSubmitted }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align: center; padding: 80px 40px; border: 1px solid {{ c.gold }}; animation: fadeIn 0.5s ease both;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 300; color: {{ c.gold }}; margin-bottom: 20px;">✓</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; font-style: italic; color: {{ c.text }}; margin-bottom: 12px;">{{ text.contact.successTitle }}</div>
+              <p style="font-size: 14px; font-weight: 300; color: {{ c.textSub }};">{{ text.contact.successSub }}</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ formNotSubmitted }}" hint-placeholder-val="{{ true }}">
+            <form onSubmit="{{ submitForm }}">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;" data-g2>
+                <input type="text" placeholder="{{ text.contact.f_name }}" required style="background: {{ c.inputBg }}; border: 1px solid {{ c.inputBorder }}; color: {{ c.text }}; padding: 15px 20px; font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 300; outline: none; width: 100%; transition: border-color 0.2s;" style-focus="border-color: {{ c.gold }};">
+                <input type="email" placeholder="{{ text.contact.f_email }}" required style="background: {{ c.inputBg }}; border: 1px solid {{ c.inputBorder }}; color: {{ c.text }}; padding: 15px 20px; font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 300; outline: none; width: 100%; transition: border-color 0.2s;" style-focus="border-color: {{ c.gold }};">
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;" data-g2>
+                <input type="tel" placeholder="{{ text.contact.f_phone }}" style="background: {{ c.inputBg }}; border: 1px solid {{ c.inputBorder }}; color: {{ c.text }}; padding: 15px 20px; font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 300; outline: none; width: 100%; transition: border-color 0.2s;" style-focus="border-color: {{ c.gold }};">
+                <input type="text" placeholder="{{ text.contact.f_date }}" style="background: {{ c.inputBg }}; border: 1px solid {{ c.inputBorder }}; color: {{ c.text }}; padding: 15px 20px; font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 300; outline: none; width: 100%; transition: border-color 0.2s;" style-focus="border-color: {{ c.gold }};">
+              </div>
+              <textarea placeholder="{{ text.contact.f_message }}" rows="5" style="background: {{ c.inputBg }}; border: 1px solid {{ c.inputBorder }}; color: {{ c.text }}; padding: 15px 20px; font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 300; outline: none; width: 100%; resize: none; margin-bottom: 22px; display: block; transition: border-color 0.2s;" style-focus="border-color: {{ c.gold }};"></textarea>
+              <button type="submit" style="background: {{ c.gold }}; color: #fff; font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 16px 52px; border: 1px solid {{ c.gold }}; cursor: pointer; transition: all 0.3s;" style-hover="background: {{ c.crimson }}; border-color: {{ c.crimson }};">{{ text.contact.submit }}</button>
+            </form>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTAGRAM -->
+  <section id="instagram" style="background: {{ c.bg }}; padding: 120px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="text-align: center; margin-bottom: 56px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 16px;">{{ text.instagram.badge }}</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 64px); font-weight: 300; font-style: italic; color: {{ c.text }}; margin-bottom: 20px;">{{ text.instagram.title }}</div>
+        <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: {{ c.textSub }}; max-width: 520px; margin: 0 auto 40px; text-wrap: pretty;">{{ text.instagram.sub }}</p>
+        <a href="https://www.instagram.com/li_lu_decor_london/" target="_blank" rel="noopener" style="background: {{ c.gold }}; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 16px 48px; text-decoration: none; display: inline-block; border: 1px solid {{ c.gold }}; transition: all 0.3s;" style-hover="background: transparent; color: {{ c.gold }};">{{ text.instagram.cta }}</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 960px; margin: 0 auto;" data-g3>
+        <div style="aspect-ratio: 1; overflow: hidden;">
+          <img src="{{ igImg1 }}" style="width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.87); transition: filter 0.3s;" style-hover="filter: brightness(1);">
+        </div>
+        <div style="aspect-ratio: 1; overflow: hidden;">
+          <img src="{{ igImg2 }}" style="width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.87); transition: filter 0.3s;" style-hover="filter: brightness(1);">
+        </div>
+        <div style="aspect-ratio: 1; overflow: hidden;">
+          <img src="{{ igImg3 }}" style="width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.87); transition: filter 0.3s;" style-hover="filter: brightness(1);">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="background: {{ c.bg2 }}; padding: 120px 0;">
+    <div style="max-width: 860px; margin: 0 auto; padding: 0 40px;">
+      <div style="text-align: center; margin-bottom: 64px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 16px;">{{ text.faq.badge }}</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 60px); font-weight: 300; font-style: italic; color: {{ c.text }};">{{ text.faq.title }}</div>
+      </div>
+      <sc-for list="{{ faqItems }}" as="fq" hint-placeholder-count="5">
+        <div style="border-bottom: 1px solid {{ c.border }};">
+          <button onClick="{{ fq.toggle }}" style="width: 100%; text-align: left; background: transparent; border: none; padding: 28px 0; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+            <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: {{ c.text }}; line-height: 1.4; text-wrap: pretty;">{{ fq.q }}</span>
+            <span style="font-family: 'Cormorant Garamond', serif; font-size: 28px; color: {{ c.gold }}; flex-shrink: 0; line-height: 1;">{{ fq.icon }}</span>
+          </button>
+          <sc-if value="{{ fq.open }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 0 48px 28px 0; animation: fadeUp 0.3s ease both;">
+              <p style="font-size: 15px; font-weight: 300; line-height: 1.9; color: {{ c.textSub }}; text-wrap: pretty;">{{ fq.a }}</p>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background: {{ c.footerBg }}; padding: 80px 0 48px;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 64px; margin-bottom: 60px;" data-footerg>
+        <div>
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+            <img src="{{ logoImg }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+            <div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: {{ c.gold }}; line-height: 1.1;">Li·Lu</div>
+              <div style="font-size: 7.5px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,230,0.38); line-height: 1; margin-top: 2px;">EVENT DECOR</div>
+            </div>
+          </div>
+          <p style="font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(245,237,230,0.42); max-width: 260px; text-wrap: pretty;">{{ text.footer.tagline }}</p>
+        </div>
+        <div>
+          <div style="font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 28px;">Navigation</div>
+          <sc-for list="{{ footerLinks }}" as="fl" hint-placeholder-count="4">
+            <a href="{{ fl.href }}" style="display: block; font-size: 14px; font-weight: 300; color: rgba(245,237,230,0.55); text-decoration: none; margin-bottom: 12px; transition: color 0.2s;" style-hover="color: {{ c.gold }};">{{ fl.name }}</a>
+          </sc-for>
+        </div>
+        <div>
+          <div style="font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: {{ c.gold }}; margin-bottom: 28px;">Social</div>
+          <a href="https://www.instagram.com/li_lu_decor_london/" target="_blank" rel="noopener" style="display: block; font-size: 14px; font-weight: 300; color: rgba(245,237,230,0.55); text-decoration: none; margin-bottom: 10px; transition: color 0.2s;" style-hover="color: {{ c.gold }};">Instagram</a>
+          <a href="https://www.instagram.com/li_lu_decor_london/" target="_blank" rel="noopener" style="font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; font-weight: 300; color: rgba(245,237,230,0.3); text-decoration: none;">@li_lu_decor_london</a>
+          <div style="margin-top: 36px; font-size: 12px; color: rgba(245,237,230,0.3);">London, United Kingdom</div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid rgba(196,163,90,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="font-size: 12px; font-weight: 300; color: rgba(245,237,230,0.28);">{{ text.footer.copy }}</div>
+        <div style="font-size: 12px; font-weight: 300; color: rgba(245,237,230,0.28);">London, UK</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING BOOK -->
+  <a href="#contact" style="position: fixed; bottom: 32px; right: 32px; z-index: 90; background: {{ c.gold }}; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 14px 26px; text-decoration: none; box-shadow: 0 4px 24px rgba(184,149,74,0.4); transition: all 0.3s;" style-hover="background: {{ c.crimson }}; box-shadow: 0 6px 30px rgba(122,22,40,0.4);">{{ text.nav.book }}</a>
+
+  <!-- MOBILE MENU -->
+  <sc-if value="{{ mobileMenuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 200; background: {{ c.bg }}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 36px; animation: fadeIn 0.3s ease;">
+      <a href="#about" onClick="{{ toggleMobileMenu }}" style="font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; font-style: italic; color: {{ c.text }}; text-decoration: none; transition: color 0.2s;" style-hover="color: {{ c.gold }};">{{ text.nav.about }}</a>
+      <a href="#services" onClick="{{ toggleMobileMenu }}" style="font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; font-style: italic; color: {{ c.text }}; text-decoration: none; transition: color 0.2s;" style-hover="color: {{ c.gold }};">{{ text.nav.services }}</a>
+      <a href="#gallery" onClick="{{ toggleMobileMenu }}" style="font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; font-style: italic; color: {{ c.text }}; text-decoration: none; transition: color 0.2s;" style-hover="color: {{ c.gold }};">{{ text.nav.gallery }}</a>
+      <a href="#contact" onClick="{{ toggleMobileMenu }}" style="font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; font-style: italic; color: {{ c.text }}; text-decoration: none; transition: color 0.2s;" style-hover="color: {{ c.gold }};">{{ text.nav.contact }}</a>
+      <div style="width: 52px; height: 1px; background: {{ c.border }};"></div>
+      <a href="#contact" onClick="{{ toggleMobileMenu }}" style="background: {{ c.gold }}; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 14px 40px; text-decoration: none;">{{ text.nav.book }}</a>
+      <button onClick="{{ toggleMobileMenu }}" style="position: absolute; top: 20px; right: 28px; background: transparent; border: 1px solid {{ c.border }}; color: {{ c.text }}; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
+    </div>
+  </sc-if>
+
+  <!-- LIGHTBOX -->
+  <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease;" onClick="{{ closeLightbox }}">
+      <img src="{{ lightboxImg }}" style="max-width: 88vw; max-height: 88vh; object-fit: contain; animation: fadeIn 0.35s ease; pointer-events: none;">
+      <button onClick="{{ closeLightbox }}" style="position: absolute; top: 24px; right: 24px; background: transparent; border: 1px solid rgba(255,255,255,0.22); color: #fff; width: 52px; height: 52px; border-radius: 50%; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" style-hover="border-color: {{ c.gold }}; color: {{ c.gold }};">×</button>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+
+class Component extends DCLogic {
+  state = {
+    lang: 'en',
+    theme: 'light',
+    lightboxImg: null,
+    openFaq: null,
+    scrolled: false,
+    hoveredGallery: null,
+    formSubmitted: false,
+    mobileMenuOpen: false,
+  };
+
+  componentDidMount() {
+    const onScroll = () => this.setState({ scrolled: window.scrollY > 80 });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    this._offScroll = () => window.removeEventListener('scroll', onScroll);
+  }
+
+  componentWillUnmount() {
+    this._offScroll && this._offScroll();
+  }
+
+  renderVals() {
+    const { lang, theme, lightboxImg, openFaq, scrolled, hoveredGallery, formSubmitted, mobileMenuOpen } = this.state;
+
+    const COLORS = {
+      light: {
+        bg: '#FAF8F4',
+        bg2: '#F0E8DC',
+        bgCard: '#FFFFFF',
+        gold: '#B8954A',
+        goldTint: 'rgba(184,149,74,0.13)',
+        crimson: '#7A1628',
+        text: '#1E1612',
+        textSub: '#6A5A52',
+        textMuted: '#A89888',
+        border: 'rgba(184,149,74,0.2)',
+        navBg: scrolled ? 'rgba(250,248,244,0.97)' : 'rgba(0,0,0,0)',
+        navBorder: scrolled ? 'rgba(184,149,74,0.14)' : 'rgba(255,255,255,0)',
+        navText: scrolled ? '#1E1612' : '#FFFFFF',
+        navShadow: scrolled ? '0 2px 24px rgba(30,22,18,0.1)' : 'none',
+        inputBg: '#F5EEE5',
+        inputBorder: 'rgba(184,149,74,0.28)',
+        footerBg: '#1A0A0E',
+      },
+      dark: {
+        bg: '#0D0508',
+        bg2: '#180A10',
+        bgCard: '#231018',
+        gold: '#C4A35A',
+        goldTint: 'rgba(196,163,90,0.11)',
+        crimson: '#5A0D18',
+        text: '#F5EDE6',
+        textSub: '#BFA898',
+        textMuted: '#8A7068',
+        border: 'rgba(196,163,90,0.18)',
+        navBg: scrolled ? 'rgba(13,5,8,0.97)' : 'rgba(0,0,0,0)',
+        navBorder: scrolled ? 'rgba(196,163,90,0.14)' : 'rgba(255,255,255,0)',
+        navText: '#F5EDE6',
+        navShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.4)' : 'none',
+        inputBg: '#2A1418',
+        inputBorder: 'rgba(196,163,90,0.2)',
+        footerBg: '#050204',
+      }
+    };
+    const c = COLORS[theme];
+
+    const T = {
+      en: {
+        nav: { about: 'About', services: 'Services', gallery: 'Gallery', contact: 'Contact', book: 'Book Now' },
+        hero: {
+          badge: "London's Premier Photo Zone Studio",
+          h1a: 'We Design',
+          h1b: 'Emotions',
+          sub: 'Bespoke photo zones and event installations that transform your most precious moments into timeless memories',
+          cta1: 'Book Your Photo Zone',
+          cta2: 'View Gallery',
+        },
+        about: {
+          badge: 'Our Story',
+          titleLine1: 'Turning Moments',
+          titleLine2: 'Into Memories',
+          p1: 'At Li-Lu Event Decor, we craft breathtaking photo zones and event installations that transform any space into a magical backdrop for your most precious moments.',
+          p2: 'Based in London, we bring together luxury floral design, balloon artistry, and elegant fabric drapery for weddings, christenings, birthdays, and every celebration in between.',
+          cta: 'Get in Touch',
+        },
+        occasions: { badge: 'Every Occasion', title: 'What We Celebrate' },
+        services: { badge: 'What We Offer', title: 'Our Services' },
+        gallery: { badge: 'Our Portfolio', title: 'Recent Work', viewAll: 'View All on Instagram' },
+        testimonials: { badge: 'Kind Words', title: 'Our Clients Say' },
+        pricing: {
+          badge: 'Pricing',
+          title: 'Every Event is Unique',
+          sub: 'We create fully personalised designs for each client. Contact us for a bespoke quote tailored to your vision and budget.',
+          cta: 'Request a Custom Quote',
+        },
+        contact: {
+          badge: 'Book Now',
+          title: "Let's Create Something Beautiful",
+          sub: "Tell us about your event and we'll get back to you within 24 hours.",
+          orLabel: 'Or reach us on Instagram',
+          f_name: 'Your full name',
+          f_email: 'Your email address',
+          f_phone: 'Your phone number',
+          f_date: 'Event date',
+          f_message: 'Tell us about your vision — colours, occasion, size…',
+          submit: 'Send Enquiry',
+          successTitle: 'Thank You!',
+          successSub: "We've received your enquiry and will be in touch shortly.",
+        },
+        instagram: {
+          badge: 'Follow Our Work',
+          title: 'Find Us on Instagram',
+          sub: 'See our latest creations, behind-the-scenes moments and event inspiration.',
+          cta: 'Follow on Instagram',
+        },
+        faq: { badge: 'FAQ', title: 'Common Questions' },
+        footer: {
+          tagline: 'Luxury Event Decor · London',
+          copy: `© ${new Date().getFullYear()} Li-Lu Event Decor. All rights reserved.`,
+        },
+        stats: [
+          { num: '1000+', label: 'Happy Clients' },
+          { num: '6+', label: 'Occasions' },
+          { num: '5★', label: 'Rating' },
+          { num: 'LDN', label: 'London Based' },
+        ],
+        faqData: [
+          { q: 'How far in advance should I book?', a: 'We recommend booking at least 4–6 weeks in advance, especially during peak wedding and holiday seasons. However, we always do our best to accommodate shorter notice requests.' },
+          { q: 'Do you travel outside London?', a: 'Yes! While based in London, we travel for events across the UK. Travel costs may apply for events outside Greater London.' },
+          { q: 'How long does setup take?', a: 'Typically 2–4 hours depending on the size and complexity of the design. We always arrive early to ensure everything is flawless before your guests arrive.' },
+          { q: 'Can I fully customise the design?', a: 'Absolutely. Every installation we create is completely bespoke. We work closely with you to bring your exact vision to life, from colour palette to specific decorative elements.' },
+          { q: 'Do you offer hire or purchase of props?', a: 'We offer both hire and sale options for many of our props and décor elements. Please enquire when booking for full details.' },
+        ],
+        occasionItems: [
+          { name: 'Weddings', sub: 'Timeless elegance', img: 'uploads/694097539_18335590807247751_6226467168652461415_n%20(1).jpg' },
+          { name: 'Christenings', sub: 'Sacred & beautiful', img: 'uploads/711426312_18338431948247751_477367916124869484_n%20(1).jpg' },
+          { name: 'Birthdays', sub: 'Unforgettable moments', img: 'uploads/724148120_18340576780247751_1065428984513739698_n%20(1).jpg' },
+          { name: 'Baby Showers', sub: 'Gentle & sweet', img: 'uploads/707463837_18337769407247751_8438318966600861407_n%20(1).jpg' },
+          { name: 'Engagements', sub: 'Love in bloom', img: 'uploads/703861963_18337176862247751_6637303644590588512_n%20(1).jpg' },
+          { name: 'Parties', sub: 'Pure celebration', img: 'uploads/720509408_18339494077247751_2379874983223305072_n%20(1).jpg' },
+        ],
+        serviceItems: [
+          { num: '01', name: 'Photo Zone Design', desc: 'Bespoke backdrops and event installations tailored to your vision and occasion.' },
+          { num: '02', name: 'Balloon Artistry', desc: 'Organic garlands, grand arches, and sculptural balloon creations for any scale.' },
+          { num: '03', name: 'Floral Arrangements', desc: 'Luxury fresh and silk floral displays crafted for every occasion and palette.' },
+          { num: '04', name: 'Fabric Drapery', desc: 'Elegant draping and fabric installations for a cinematic, romantic effect.' },
+          { num: '05', name: 'Neon Signs', desc: 'Custom neon signage to personalise your event with a glowing message.' },
+          { num: '06', name: 'Full Event Styling', desc: 'Complete event design from concept through to stunning, flawless reality.' },
+        ],
+        testimonialItems: [
+          { text: 'Li-Lu transformed our wedding reception into something beyond imagination. The photo zone was the centrepiece of the entire evening — every single guest wanted a photo there.', name: 'Sarah M.', occasion: 'Wedding' },
+          { text: "Absolutely stunning work for our daughter's christening. Every detail was crafted with such artistry and care. The balloon arch left our guests completely speechless.", name: 'Anna K.', occasion: 'Christening' },
+          { text: "Our daughter's first birthday was truly magical. The setup was exactly what we dreamed of — romantic, elegant, and impossibly photogenic.", name: 'Emma T.', occasion: 'Birthday' },
+        ],
+        footerLinks: [
+          { name: 'About', href: '#about' },
+          { name: 'Services', href: '#services' },
+          { name: 'Gallery', href: '#gallery' },
+          { name: 'Contact', href: '#contact' },
+        ],
+      },
+      uk: {
+        nav: { about: 'Про нас', services: 'Послуги', gallery: 'Галерея', contact: 'Контакт', book: 'Замовити' },
+        hero: {
+          badge: 'Преміальні фотозони у Лондоні',
+          h1a: 'Ми створюємо',
+          h1b: 'Емоції',
+          sub: 'Унікальні фотозони та івент-інсталяції, що перетворюють ваші найцінніші моменти на вічні спогади',
+          cta1: 'Замовити фотозону',
+          cta2: 'Переглянути роботи',
+        },
+        about: {
+          badge: 'Наша Історія',
+          titleLine1: 'Перетворюємо моменти',
+          titleLine2: 'на спогади',
+          p1: 'У Li-Lu Event Decor ми створюємо приголомшливі фотозони та івент-інсталяції, які перетворюють будь-який простір на магічний фон для ваших найцінніших моментів.',
+          p2: "Базуючись у Лондоні, ми поєднуємо розкішний флористичний дизайн, балонне мистецтво та елегантний текстиль для весіль, хрещень, днів народження та будь-яких урочистостей.",
+          cta: "Зв'язатися",
+        },
+        occasions: { badge: 'Будь-який привід', title: 'Що ми святкуємо' },
+        services: { badge: 'Що ми пропонуємо', title: 'Наші послуги' },
+        gallery: { badge: 'Наше портфоліо', title: 'Наші роботи', viewAll: 'Переглянути все в Instagram' },
+        testimonials: { badge: 'Відгуки', title: 'Що кажуть клієнти' },
+        pricing: {
+          badge: 'Ціни',
+          title: 'Кожна подія унікальна',
+          sub: "Ми створюємо повністю персоналізовані дизайни для кожного клієнта. Зв'яжіться з нами для індивідуального розрахунку.",
+          cta: 'Запросити ціну',
+        },
+        contact: {
+          badge: 'Замовити',
+          title: 'Створімо щось прекрасне',
+          sub: "Розкажіть нам про вашу подію, і ми зв'яжемося з вами протягом 24 годин.",
+          orLabel: "Або зв'яжіться в Instagram",
+          f_name: "Ваше ім'я",
+          f_email: 'Ваша електронна адреса',
+          f_phone: 'Ваш номер телефону',
+          f_date: 'Дата події',
+          f_message: 'Розкажіть про ваше бачення — кольори, привід, розмір…',
+          submit: 'Надіслати запит',
+          successTitle: 'Дякуємо!',
+          successSub: "Ми отримали ваш запит і незабаром зв'яжемося з вами.",
+        },
+        instagram: {
+          badge: 'Стежте за нами',
+          title: 'Ми в Instagram',
+          sub: 'Дивіться наші останні роботи, закулісні моменти та натхнення для вашої події.',
+          cta: 'Підписатися в Instagram',
+        },
+        faq: { badge: 'ЧАП', title: 'Часті запитання' },
+        footer: {
+          tagline: 'Розкішний декор подій · Лондон',
+          copy: `© ${new Date().getFullYear()} Li-Lu Event Decor. Усі права захищені.`,
+        },
+        stats: [
+          { num: '1000+', label: 'Щасливих клієнтів' },
+          { num: '6+', label: 'Типів подій' },
+          { num: '5★', label: 'Рейтинг' },
+          { num: 'LDN', label: 'Лондон' },
+        ],
+        faqData: [
+          { q: 'Наскільки завчасно потрібно бронювати?', a: 'Ми рекомендуємо бронювати щонайменше за 4–6 тижнів, особливо в пік весільного сезону та свят. Однак ми завжди намагаємося задовольнити і термінові замовлення.' },
+          { q: 'Чи ви виїжджаєте за межі Лондона?', a: 'Так! Хоча ми базуємося в Лондоні, ми виїжджаємо на заходи по всьому Великобританії. Для заходів за межами Великого Лондона можуть застосовуватися витрати на проїзд.' },
+          { q: 'Скільки часу займає монтаж?', a: 'Зазвичай 2–4 години залежно від розміру та складності дизайну. Ми завжди приїжджаємо заздалегідь, щоб все було ідеально до приходу ваших гостей.' },
+          { q: 'Чи можна повністю кастомізувати дизайн?', a: 'Абсолютно. Кожна наша інсталяція повністю ексклюзивна. Ми тісно працюємо з вами, щоб втілити ваше точне бачення — від кольорової палітри до конкретних декоративних елементів.' },
+          { q: 'Чи ви пропонуєте оренду або продаж реквізиту?', a: "Ми пропонуємо як оренду, так і продаж багатьох наших реквізитів та елементів декору. Будь ласка, запитайте при бронюванні для повної інформації." },
+        ],
+        occasionItems: [
+          { name: 'Весілля', sub: 'Вишукана елегантність', img: 'uploads/694097539_18335590807247751_6226467168652461415_n%20(1).jpg' },
+          { name: 'Хрещення', sub: 'Священно та красиво', img: 'uploads/711426312_18338431948247751_477367916124869484_n%20(1).jpg' },
+          { name: 'Дні народження', sub: 'Незабутні моменти', img: 'uploads/724148120_18340576780247751_1065428984513739698_n%20(1).jpg' },
+          { name: 'Бебі Шауер', sub: 'Ніжно та солодко', img: 'uploads/707463837_18337769407247751_8438318966600861407_n%20(1).jpg' },
+          { name: 'Заручини', sub: 'Кохання у квітах', img: 'uploads/703861963_18337176862247751_6637303644590588512_n%20(1).jpg' },
+          { name: 'Вечірки', sub: 'Чисте свято', img: 'uploads/720509408_18339494077247751_2379874983223305072_n%20(1).jpg' },
+        ],
+        serviceItems: [
+          { num: '01', name: 'Дизайн фотозон', desc: 'Унікальні задники та інсталяції під ваше бачення та привід.' },
+          { num: '02', name: 'Балонне мистецтво', desc: 'Органічні гірлянди, великі арки та скульптурні роботи з балонів.' },
+          { num: '03', name: 'Флористика', desc: 'Розкішні флористичні композиції з живих та штучних квітів для кожного приводу.' },
+          { num: '04', name: 'Текстильний декор', desc: 'Елегантні тканинні інсталяції для кінематографічного ефекту.' },
+          { num: '05', name: 'Неонові вивіски', desc: 'Персоналізовані неонові вивіски для вашої унікальної події.' },
+          { num: '06', name: 'Повний стайлінг', desc: 'Повний дизайн заходу від концепції до приголомшливої реальності.' },
+        ],
+        testimonialItems: [
+          { text: 'Li-Lu перетворила наш весільний прийом на щось неймовірне. Фотозона стала центром уваги всього вечора — кожен гість хотів там сфотографуватися.', name: 'Сара М.', occasion: 'Весілля' },
+          { text: 'Приголомшлива робота для хрещення нашої доньки. Кожна деталь виконана з такою майстерністю та турботою. Балонна арка вразила наших гостей до глибини душі.', name: 'Анна К.', occasion: 'Хрещення' },
+          { text: 'Перший день народження нашої доньки був по-справжньому чарівним завдяки Li-Lu. Декор виявився саме таким, про що ми мріяли.', name: 'Емма Т.', occasion: 'День народження' },
+        ],
+        footerLinks: [
+          { name: 'Про нас', href: '#about' },
+          { name: 'Послуги', href: '#services' },
+          { name: 'Галерея', href: '#gallery' },
+          { name: 'Контакт', href: '#contact' },
+        ],
+      }
+    };
+
+    const text = T[lang];
+
+    const RAW_GALLERY = [
+      'uploads/694097539_18335590807247751_6226467168652461415_n%20(1).jpg',
+      'uploads/695721841_18335590816247751_8408170223730773217_n%20(2).jpg',
+      'uploads/695776312_18335815942247751_4304895573156013659_n%20(1).jpg',
+      'uploads/703861963_18337176862247751_6637303644590588512_n%20(1).jpg',
+      'uploads/707463837_18337769407247751_8438318966600861407_n%20(1).jpg',
+      'uploads/708918778_18337769398247751_5584419568723419515_n%20(1).jpg',
+      'uploads/711426312_18338431948247751_477367916124869484_n%20(1).jpg',
+      'uploads/712763630_18338433010247751_7894388601569144510_n%20(1).jpg',
+      'uploads/720509408_18339494077247751_2379874983223305072_n%20(1).jpg',
+      'uploads/722245488_18340513147247751_5249748570076482691_n%20(1).jpg',
+      'uploads/723190588_18340212154247751_1950553323296251221_n%20(1).jpg',
+      'uploads/724148120_18340576780247751_1065428984513739698_n%20(1).jpg',
+    ];
+
+    const galleryImages = RAW_GALLERY.map((src, i) => ({
+      src,
+      open: () => this.setState({ lightboxImg: src }),
+      onMouseEnter: () => this.setState({ hoveredGallery: i }),
+      onMouseLeave: () => this.setState({ hoveredGallery: null }),
+      imgStyle: {
+        width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+        transition: 'transform 0.5s ease',
+        transform: hoveredGallery === i ? 'scale(1.06)' : 'scale(1)',
+      },
+      overlayStyle: {
+        position: 'absolute', inset: '0',
+        background: hoveredGallery === i ? 'rgba(0,0,0,0.48)' : 'rgba(0,0,0,0)',
+        transition: 'background 0.35s',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        pointerEvents: 'none',
+      },
+      iconStyle: {
+        width: '48px', height: '48px',
+        border: `1.5px solid ${c.gold}`,
+        borderRadius: '50%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: "'Raleway', sans-serif",
+        fontSize: '20px', color: c.gold,
+        opacity: hoveredGallery === i ? '1' : '0',
+        transition: 'opacity 0.3s',
+        fontWeight: '300',
+      },
+    }));
+
+    const faqItems = text.faqData.map((item, i) => ({
+      q: item.q,
+      a: item.a,
+      open: openFaq === i,
+      icon: openFaq === i ? '−' : '+',
+      toggle: () => this.setState({ openFaq: openFaq === i ? null : i }),
+    }));
+
+    return {
+      c,
+      text,
+      lang,
+      theme,
+      themeIcon: theme === 'light' ? '◑' : '◐',
+      themeLabel: theme === 'light' ? 'Dark mode' : 'Light mode',
+      langLabel: lang === 'en' ? 'UA' : 'EN',
+      scrolled,
+      logoImg: 'uploads/403887315_1371019646833214_3685505428031404770_n.jpg',
+      heroImg: 'uploads/695721841_18335590816247751_8408170223730773217_n%20(2).jpg',
+      aboutImg: 'uploads/712763630_18338433010247751_7894388601569144510_n%20(1).jpg',
+      igImg1: 'uploads/720509408_18339494077247751_2379874983223305072_n%20(1).jpg',
+      igImg2: 'uploads/708918778_18337769398247751_5584419568723419515_n%20(1).jpg',
+      igImg3: 'uploads/724148120_18340576780247751_1065428984513739698_n%20(1).jpg',
+      stats: text.stats,
+      occasions: text.occasionItems,
+      services: text.serviceItems,
+      testimonials: text.testimonialItems,
+      footerLinks: text.footerLinks,
+      faqItems,
+      galleryImages,
+      lightboxImg,
+      lightboxOpen: !!lightboxImg,
+      formSubmitted,
+      formNotSubmitted: !formSubmitted,
+      mobileMenuOpen,
+      toggleLang: () => this.setState({ lang: lang === 'en' ? 'uk' : 'en' }),
+      toggleTheme: () => this.setState({ theme: theme === 'light' ? 'dark' : 'light' }),
+      closeLightbox: () => this.setState({ lightboxImg: null }),
+      submitForm: (e) => { e.preventDefault(); this.setState({ formSubmitted: true }); },
+      toggleMobileMenu: () => this.setState({ mobileMenuOpen: !mobileMenuOpen }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>
